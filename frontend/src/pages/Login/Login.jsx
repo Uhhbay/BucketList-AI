@@ -24,7 +24,7 @@ export default function Login() {
               </label>
               <a href="#">Forgot Password</a>
           </div>
-          <button type="submit" className='logButton'>Log In</button>
+          <button type="submit" className='logButton bg-sky-600 hover:bg-sky-400'>Log In</button>
           <div className="register">
             <p>
               Don't have an account?  
