@@ -6,8 +6,8 @@ import './Login.css';
 export default function Login() {
   return (
     <div className="wrapper">
-      <form action="#">
-        <h2>Welcome</h2>
+      <form action="#" className='logForm'>
+        <h2 className='welcome'>Welcome</h2>
         <div className="input">
             <input type="text" required/>
             <label>Username</label>
@@ -23,7 +23,7 @@ export default function Login() {
             </label>
             <a href="#">Forgot Password</a>
         </div>
-        <button type="submit">Log In</button>
+        <button type="submit" className='logButton'>Log In</button>
         <div className="register">
           <p>
             Don't have an account?
