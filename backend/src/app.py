@@ -1,5 +1,6 @@
-from fastapi import FastAPI, middleware
-from backend.api.agent import router as agent_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from api.agent import router as agent_router
 
 import uvicorn
 import logging
@@ -7,17 +8,17 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 ALLOWED_ORIGINS = (
-    "http://localhost:8000"
+    "http://localhost:3001"
 )
 
 app = FastAPI()
 
 app.add_middleware(
-    middleware.cors.CORSMiddleware,
+    CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=False,
     allow_methods=["GET", "POST"],
-    allow_headers=[],
+    allow_headers=["*"],
 )
 app.include_router(agent_router, prefix="/api/agent")
 
