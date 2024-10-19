@@ -12,28 +12,7 @@ import uvicorn
 
 from dal import BucketListDAL, BucketList
 
-app = FastAPI()
 
-# Enable CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
-
-# API routes
-@app.get("/api/hello")
-async def hello():
-    return {"message": "Hello from FastAPI!"}
-
-# Serve React App
-app.mount("/", StaticFiles(directory="../../frontend/build", html=True), name="react_app")
-
-@app.get("/{full_path:path}")
-async def serve_react(full_path: str):
-    return FileResponse("../../frontend/build/index.html")
 
 
 COLLECTION_NAME = "bucket_list"
@@ -64,6 +43,27 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, debug=DEBUG)
 
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
+# API routes
+@app.get("/api/hello")
+async def hello():
+    return {"message": "Hello from FastAPI!"}
+
+# Serve React App
+app.mount("/", StaticFiles(directory="../../frontend/build", html=True), name="react_app")
+
+@app.get("/{full_path:path}")
+async def serve_react(full_path: str):
+    return FileResponse("../../frontend/build/index.html")
+
 # Models for request and response validation
 class NewItem(BaseModel):
     description: str
@@ -73,7 +73,6 @@ class NewItemResponse(BaseModel):
     description: str
 
 class ItemUpdate(BaseModel):
-    item_id: str
     completed: bool
 
 # Routes
@@ -83,7 +82,7 @@ async def get_bucket_list() -> BucketList:
     return await app.bucket_list_dal.get_bucket_list()
 
 @app.post("/api/bucketlist/items", status_code=status.HTTP_201_CREATED, response_model=NewItemResponse)
-async def create_item(new_item: NewItem) -> BucketList:
+async def create_item(new_item: NewItem) -> NewItemResponse:
     """Add a new item to the bucket list"""
     updated_list = await app.bucket_list_dal.add_item(description=new_item.description)
     return NewItemResponse(

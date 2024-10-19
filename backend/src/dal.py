@@ -8,7 +8,7 @@ from uuid import uuid4
 class BucketListItem(BaseModel):
     id: str
     description: str
-    completed: bool
+    completed: bool  # Track if the item is completed
 
     @staticmethod
     def from_doc(item) -> "BucketListItem":
@@ -33,7 +33,7 @@ class BucketList(BaseModel):
 class BucketListDAL:
     def __init__(self, bucket_collection: AsyncIOMotorCollection):
         self._bucket_collection = bucket_collection
-        self._bucketlist_id = ObjectId("6508e2e2e2e8e2e2e2e2e2e2")  # Fixed ID for single bucket list
+        self._bucketlist_id = ObjectId("6508e2e2e2e8e2e2e2e2e2e2")  # Fixed ID for the single bucket list
 
     async def get_bucket_list(self, session=None) -> BucketList:
         doc = await self._bucket_collection.find_one(
@@ -50,7 +50,7 @@ class BucketListDAL:
                     "items": {
                         "id": uuid4().hex,
                         "description": description,
-                        "completed": False,
+                        "completed": False,  # Default to not completed
                     }
                 }
             },
