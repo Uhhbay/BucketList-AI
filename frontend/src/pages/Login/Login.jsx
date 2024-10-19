@@ -26,7 +26,7 @@ export default function Login() {
         <button type="submit" className='logButton'>Log In</button>
         <div className="register">
           <p>
-            Don't have an account?
+            Don't have an account?  
             <a href="#">Register</a>
           </p>
         </div>
