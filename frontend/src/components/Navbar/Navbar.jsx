@@ -39,7 +39,7 @@ export default function Navbar() {
                 <Link
                   key={index}
                   to={link.path}
-                  className={`text-2xl ${activeSection === link.name ? "text-blue-600" : "text-gray-800"} hover:text-blue-400`}
+                  className={`text-4xl ${activeSection === link.name ? "text-blue-600" : "text-gray-800"} hover:text-blue-400`}
                   onClick={() => {
                     setActiveSection(link.name);
                     setIsOpen(false);
@@ -53,12 +53,12 @@ export default function Navbar() {
         )}
       </AnimatePresence>
       <motion.div 
-        className="flex justify-between fixed top-0 left-0 h-16 w-full bg-white shadow-md px-4 sm:px-6"
+        className="flex items-center justify-between fixed top-0 left-0 h-16 w-full bg-white shadow-md px-4 sm:px-6"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
-        <Link to="/" className="flex items-center text-2xl font-bold text-gray-800">
-          BucketList-AI
+        <Link to="/" className="flex items-center text-xl font-bold text-gray-800">
+          BucketList AI
         </Link>
         <button className="sm:hidden" onClick={toggleMenu}>
           <FontAwesomeIcon
@@ -73,7 +73,7 @@ export default function Navbar() {
                 <Link
                   to={link.path}
                   className={`px-3 py-2 rounded-md ${
-                    activeSection === link.name ? "text-blue-600" : "text-gray-800"
+                    activeSection === link.name ? "text-blue-600 font-semibold" : "text-gray-800"
                   } hover:text-blue-400`}
                   onClick={() => setActiveSection(link.name)}
                 >
@@ -96,7 +96,7 @@ export default function Navbar() {
               <FontAwesomeIcon icon={faUser} className="w-6 h-6" />
             </Link>
           ) : (
-            <Link to="/login" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <Link to="/login" className="px-4 text-sm font-medium py-2 bg-blue-800 text-white rounded-xl hover:bg-blue-400 ease-in duration-100">
               Login
             </Link>
           )}
