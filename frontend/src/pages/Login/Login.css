@@ -120,3 +120,7 @@ input input:focus~label,
     margin-top: 30px;
     color: whitesmoke;
 }
+
+.logButton:hover {
+    background-color: grey; 
+  }
