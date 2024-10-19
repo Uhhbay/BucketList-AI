@@ -1,7 +1,8 @@
-from fastapi import FastAPI, HTTPException, status, Depends, Request, Response
+from fastapi import FastAPI, HTTPException, status, Depends, Request, Response, Query
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.middleware.cors import CORSMiddleware
+from amadeus import search_cheapest_flights
 from contextlib import asynccontextmanager
 import os
 import sys
@@ -155,6 +156,15 @@ async def delete_item(item_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Bucket not found")
 
     return bucket
+
+#AMADEUS GETTER
+@app.get("/search-cheapest-flights")
+def get_cheapest_flights(
+    origin: str,
+    max_price: int = Query(None, description="Maximum price filter for flights"),
+    duration: str = Query(None, description="Maximum duration filter (e.g., '5H', '10H') for flights"),
+):
+    return search_cheapest_flights(origin, max_price, duration)
 
 # Main function to start the server
 def main(argv=sys.argv[1:]):
