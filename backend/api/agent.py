@@ -3,7 +3,7 @@ import fastapi
 router = fastapi.APIRouter()
 
 @router.get("/")
-def get_root():
+def root():
     return "Hello from Agent API"
 
 # TODO: Get itinerary from LLM agent with post bucket list data
