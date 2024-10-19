@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +13,17 @@ const links = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDashboard = () => {
+    const isLoggedIn = localStorage.getItem('bucketlist-token');
+
+    if (isLoggedIn) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  }
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -36,17 +46,22 @@ export default function Navbar() {
           >
             <div className="flex flex-col h-full justify-center items-center gap-4">
               {links.map((link, index) => (
-                <Link
+                <button
                   key={index}
-                  to={link.path}
                   className={`text-4xl ${activeSection === link.name ? "text-sky-600" : "text-gray-800"} hover:text-sky-400`}
                   onClick={() => {
-                    setActiveSection(link.name);
+                    if (link.path === "/dashboard") {
+                      handleDashboard();
+                    } else {
+                      setActiveSection(link.name);
+                      navigate(link.path);
+
+                    }
                     setIsOpen(false);
                   }}
                 >
                   {link.name}
-                </Link>
+                </button>
               ))}
             </div>
           </motion.div>
@@ -54,9 +69,6 @@ export default function Navbar() {
       </AnimatePresence>
       <motion.div 
         className="flex items-center justify-between fixed top-0 left-0 h-16 w-full bg-white/70 backdrop-blur-sm shadow-md px-4 sm:px-6"
-        // style={{
-        //   boxShadow: '0 1px 6px rgba(0, 112, 243, 0.5)', // Blue shadow with opacity
-        // }}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
@@ -78,12 +90,19 @@ export default function Navbar() {
           <ul className="flex space-x-3">
             {links.map((link) => (
               <motion.li key={link.path} className="relative">
-                <Link
-                  to={link.path}
+                <button
                   className={`px-1 rounded-md ${
                     activeSection === link.name ? "text-sky-600 font-semibold" : "text-gray-800"
                   } hover:text-sky-400`}
-                  onClick={() => setActiveSection(link.name)}
+                  onClick={(e) => {
+                    if (link.path === "/dashboard") {
+                      e.preventDefault();
+                      handleDashboard();
+                    } else {
+                      setActiveSection(link.name);
+                      navigate(link.path);
+                    }
+                  }}
                 >
                   {link.name}
                   {link.name === activeSection && (
@@ -93,7 +112,7 @@ export default function Navbar() {
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </Link>
+                </button>
               </motion.li>
             ))}
           </ul>

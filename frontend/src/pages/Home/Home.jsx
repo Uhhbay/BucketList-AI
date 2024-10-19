@@ -1,8 +1,20 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import backgroundImg from "../../assets/airplanebg.jpeg";
 
 export default function Home() {
+    const navigate = useNavigate();
+
+    const handleGetStarted = () => {
+        const isLoggedIn = localStorage.getItem('bucketlist-token');;
+
+        if (isLoggedIn) {
+            navigate('/dashboard');
+        } else {
+            navigate('/login');
+        }
+    }
+    
     return (
         <div className="flex items-center justify-center min-h-screen"
              style={{ 
@@ -17,9 +29,9 @@ export default function Home() {
                 <h1 className="text-3xl sm:text-5xl font-semibold">BucketList AI</h1>
                 <h4 className="text-md sm:text-2xl font-sm mt-1">Emphasis on smooth, optimized travel planning.</h4>
 
-                <Link to="/login" className="mt-8 px-4 text-sm font-medium sm:font-semibold py-2 bg-sky-600 text-white rounded-xl hover:bg-sky-400 ease-in duration-100">
+                <button onClick={handleGetStarted} className="mt-8 px-4 text-sm font-medium sm:font-semibold py-2 bg-sky-600 text-white rounded-xl hover:bg-sky-400 ease-in duration-100">
                     Click here to get started
-                </Link>
+                </button>
             </div>
         </div>
     );
