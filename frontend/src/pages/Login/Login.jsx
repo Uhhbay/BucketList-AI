@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
+import { useNavigate } from "react-router-dom";
 import './Login.css';
 import backgroundImg from "../../assets/airplanebg.jpeg";
 
@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ export default function Login() {
       } else {
         setSuccess(data.message);
         setError('');
-        // navigate('/dashboard');
+        navigate('/dashboard');
       }
     } catch (err) {
       console.error('Error:', err);
