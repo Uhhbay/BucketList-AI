@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       // Send login data to the backend
-      const response = await fetch('http://localhost:3001/login', {
+      const response = await fetch('http://localhost:3001/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ export default function Login() {
     }}
     >
       <div className="wrapper">
-        <form action="#" className='logForm'>
+        <form onSubmit={handleSubmit} className='logForm'>
           <h2 className='welcome font-medium'>Welcome</h2>
           <div className="input">
               <input
