@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const links = [
   { name: "Home", path: "/" },
@@ -13,7 +13,7 @@ const links = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -75,12 +75,12 @@ export default function Navbar() {
           />
         </button>
         <nav className="hidden sm:flex items-center">
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-3">
             {links.map((link) => (
               <motion.li key={link.path} className="relative">
                 <Link
                   to={link.path}
-                  className={`px-3 py-2 rounded-md ${
+                  className={`px-1 rounded-md ${
                     activeSection === link.name ? "text-sky-600 font-semibold" : "text-gray-800"
                   } hover:text-sky-400`}
                   onClick={() => setActiveSection(link.name)}
