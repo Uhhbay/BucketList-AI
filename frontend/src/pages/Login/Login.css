@@ -117,7 +117,7 @@ input input:focus~label,
     padding: 12px 20px;
     font-size: 1rem;
     border: 2px solid transparent;
-    border-radius: 3px;
+    border-radius: 15px;
     transition: 0.3s ease;
 }
 

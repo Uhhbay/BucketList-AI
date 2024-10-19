@@ -1,70 +1,69 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Depends, Request, Response
 from pydantic import BaseModel
-from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from datetime import datetime
 import os
 import sys
 import uvicorn
+import uuid
+from dotenv import load_dotenv
+load_dotenv()
 
-from dal import BucketListDAL, BucketList
+from dal import UserDAL, BucketList, BucketListItem
 
-
-
-
-COLLECTION_NAME = "bucket_list"
+# Configuration
 MONGODB_URI = os.environ["MONGODB_URI"]
+DATABASE_NAME = "bucketlist_db"
+USER_COLLECTION = "users"
+BUCKET_COLLECTION = "buckets"
+SESSION_COOKIE_NAME = "session_id"
 DEBUG = os.environ.get("DEBUG", "").strip().lower() in {"1", "true", "on", "yes"}
 
+# In-memory session store
+sessions = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup:
+    # Startup
     client = AsyncIOMotorClient(MONGODB_URI)
-    database = client.get_default_database()
+    database = client.get_database(DATABASE_NAME)
 
-    # Ensure the database is available:
+    # Ensure the database is available
     pong = await database.command("ping")
     if int(pong["ok"]) != 1:
         raise Exception("Cluster connection is not okay!")
 
-    bucket_collection = database.get_collection(COLLECTION_NAME)
-    app.bucket_list_dal = BucketListDAL(bucket_collection)
+    user_collection = database.get_collection(USER_COLLECTION)
+    bucket_collection = database.get_collection(BUCKET_COLLECTION)
+    app.user_dal = UserDAL(user_collection, bucket_collection)
 
-    # Yield back to FastAPI Application:
+    # Yield back to FastAPI Application
     yield
 
-    # Shutdown:
+    # Shutdown
     client.close()
-
 
 app = FastAPI(lifespan=lifespan, debug=DEBUG)
 
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# API routes
-@app.get("/api/hello")
-async def hello():
-    return {"message": "Hello from FastAPI!"}
+# Pydantic Models
+class UserCreate(BaseModel):
+    username: str
+    password: str
 
-# Serve React App
-app.mount("/", StaticFiles(directory="../../frontend/build", html=True), name="react_app")
+class UserLogin(BaseModel):
+    username: str
+    password: str
 
-@app.get("/{full_path:path}")
-async def serve_react(full_path: str):
-    return FileResponse("../../frontend/build/index.html")
-
-# Models for request and response validation
 class NewItem(BaseModel):
     description: str
 
@@ -75,43 +74,86 @@ class NewItemResponse(BaseModel):
 class ItemUpdate(BaseModel):
     completed: bool
 
-# Routes
-@app.get("/api/bucketlist", response_model=BucketList)
-async def get_bucket_list() -> BucketList:
-    """Retrieve the single bucket list"""
-    return await app.bucket_list_dal.get_bucket_list()
+# Helper function to create session and set cookie
+def create_session(response: Response, bucket_id: str):
+    session_id = str(uuid.uuid4())  # Generate a unique session ID
+    sessions[session_id] = bucket_id  # Store bucket_id in memory
+    response.set_cookie(key=SESSION_COOKIE_NAME, value=session_id)
 
-@app.post("/api/bucketlist/items", status_code=status.HTTP_201_CREATED, response_model=NewItemResponse)
-async def create_item(new_item: NewItem) -> NewItemResponse:
-    """Add a new item to the bucket list"""
-    updated_list = await app.bucket_list_dal.add_item(description=new_item.description)
-    return NewItemResponse(
-        id=str(updated_list.items[-1].id),
-        description=new_item.description,
-    )
+# Login and registration
+@app.post("/api/register", status_code=status.HTTP_201_CREATED)
+async def register_user(user: UserCreate, response: Response):
+    """Register a new user and create a bucket for them"""
+    existing_user = await app.user_dal.get_user_by_username(user.username)
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Username already exists")
 
-@app.patch("/api/bucketlist/items/{item_id}/completed", response_model=BucketList)
-async def update_item_completed(item_id: str, update: ItemUpdate) -> BucketList:
+    new_user = await app.user_dal.create_user(user.username, user.password)
+    
+    # Create session and store bucket_id in session
+    create_session(response, new_user.bucket_id)
+    
+    return {"message": "User created successfully", "bucket_id": new_user.bucket_id}
+
+@app.post("/api/login", status_code=status.HTTP_200_OK)
+async def login_user(user: UserLogin, response: Response):
+    """Log in a user and create a session"""
+    db_user = await app.user_dal.get_user_by_username(user.username)
+    if not db_user or not await app.user_dal.verify_password(user.password, db_user.hashed_password):
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    # Create session and store bucket_id in session
+    create_session(response, db_user.bucket_id)
+
+    return {"message": "Login successful"}
+
+# Get current bucket_id from session
+def get_current_bucket_id(request: Request) -> str:
+    session_id = request.cookies.get(SESSION_COOKIE_NAME)
+    if not session_id or session_id not in sessions:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return sessions[session_id]
+
+# Bucket operations
+@app.get("/api/bucket", response_model=BucketList)
+async def get_user_bucket(request: Request):
+    """Retrieve the logged-in user's bucket"""
+    bucket_id = get_current_bucket_id(request)
+    bucket = await app.user_dal.get_bucket(bucket_id)
+    if not bucket:
+        raise HTTPException(status_code=404, detail="Bucket not found")
+    return bucket
+
+@app.post("/api/bucket/items", status_code=status.HTTP_201_CREATED, response_model=NewItemResponse)
+async def add_item_to_bucket(item: NewItem, request: Request):
+    """Add a new item to the user's bucket"""
+    bucket_id = get_current_bucket_id(request)
+    print(bucket_id)
+    bucket = await app.user_dal.add_item_to_bucket(bucket_id, item.description)
+    if not bucket:
+        raise HTTPException(status_code=404, detail="Bucket not found")
+    print(bucket)
+    return NewItemResponse(id=bucket.items[-1].id, description=item.description)
+
+@app.patch("/api/bucket/items/{item_id}/completed", response_model=BucketList)
+async def update_item_completed(item_id: str, update: ItemUpdate, request: Request):
     """Update the completion status of a bucket list item"""
-    return await app.bucket_list_dal.set_item_completed(item_id=item_id, completed=update.completed)
+    bucket_id = get_current_bucket_id(request)
+    bucket = await app.user_dal.set_item_completed(bucket_id=bucket_id, item_id=item_id, completed=update.completed)
+    if not bucket:
+        raise HTTPException(status_code=404, detail="Bucket not found")
 
-@app.delete("/api/bucketlist/items/{item_id}", response_model=BucketList)
-async def delete_item(item_id: str) -> BucketList:
-    """Delete an item from the bucket list"""
-    return await app.bucket_list_dal.delete_item(item_id=item_id)
+    return bucket
 
-# Utility dummy route for testing
-class DummyResponse(BaseModel):
-    id: str
-    when: datetime
+@app.delete("/api/bucket/items/{item_id}", response_model=BucketList)
+async def delete_item(item_id: str, request: Request):
+    """Delete an item from the user's bucket list"""
+    bucket_id = get_current_bucket_id(request)
+    bucket = await app.user_dal.delete_item(bucket_id=bucket_id, item_id=item_id)
+    if not bucket:
+        raise HTTPException(status_code=404, detail="Bucket not found")
 
-@app.get("/api/dummy", response_model=DummyResponse)
-async def get_dummy() -> DummyResponse:
-    """A dummy route for testing purposes"""
-    return DummyResponse(
-        id=str(ObjectId()),
-        when=datetime.now(),
-    )
+    return bucket
 
 # Main function to start the server
 def main(argv=sys.argv[1:]):
@@ -121,4 +163,4 @@ def main(argv=sys.argv[1:]):
         pass
 
 if __name__ == "__main__":
-    main() 
+    main()
