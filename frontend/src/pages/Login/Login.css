@@ -1,29 +1,27 @@
 .login-container {
-    /* min-height: 100vh; */
+    min-height: 100vh; 
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url("../../assets/loginBack.jpg") no-repeat center center fixed;
+    background: whitesmoke;
     background-size: cover;
 }
 
 .wrapper {
     margin: 0;
-    padding: 0;
+    padding: 1.875rem;
     box-sizing: border-box;
     font-family: sans-serif;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 67.5rem;
-    padding: 0 0.625rem;
-    color: whitesmoke;
-    width: 30.625rem;
-    border-radius: 0.5;
-    padding: 1.875rem;
+    width: 100%; 
+    max-width: 30rem; 
+    background: black; 
+    border-radius: 8px;
     border: 1px solid grey; 
     backdrop-filter: blur(0.5rem);
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
@@ -89,6 +87,7 @@ input input:focus~label,
     align-items: center;
     justify-content: space-between;
     margin: 25px 0 35px 0;
+    gap: 1rem;
 }
 
 #remember {
@@ -101,7 +100,7 @@ input input:focus~label,
 }
 
 .forgotten label p {
-    margin-left: o.5rem;
+    margin-left: 0.5rem;
 }
 
 .wrapper a {
@@ -127,6 +126,13 @@ input input:focus~label,
     text-align: center;
     margin-top: 30px;
     color: whitesmoke;
+}
+.register p {
+    display: inline;
+}
+
+.register a {
+    margin-left: 0.5rem; 
 }
 
 .logButton:hover {
