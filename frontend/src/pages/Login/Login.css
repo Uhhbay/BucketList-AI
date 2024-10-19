@@ -1,0 +1,123 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    
+}
+
+body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 67.5rem;
+    padding: 0 0.625rem;
+    color: whitesmoke;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper {
+    width: 30.625rem;
+    border-radius: 0.5;
+    padding: 1.875rem;
+    border: 1px solid grey; 
+    backdrop-filter: blur(0.5rem);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: whitesmoke;
+}
+
+.input {
+    position: relative;
+    border-bottom: 2px solid whitesmoke;
+    margin: 15px 0;
+}
+
+.input label {
+    position: absolute;
+    color: whitesmoke;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: 0.15s ease;
+}
+
+.input input {
+    width: 100%;
+    height: 2.5rem;
+    color: whitesmoke;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+
+}
+
+input input:focus~label,
+.input input:valid~label {
+    font-size: 0.8rem;
+    top: 10px;
+    transform: translateY(-120%);
+}
+
+.forgotten {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0 35px 0;
+}
+
+#remember {
+    accent-color: whitesmoke;
+}
+
+.forgotten label {
+    display: flex;
+    align-items: center;
+}
+
+.forgotten label p {
+    margin-left: o.5rem;
+}
+
+.wrapper a {
+    color: whitesmoke;
+    text-decoration: underline;
+
+}
+
+button {
+    background: whitesmoke;
+    color: black;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    transition: 0.3s ease;
+}
+
+.register {
+    text-align: center;
+    margin-top: 30px;
+    color: whitesmoke;
+}

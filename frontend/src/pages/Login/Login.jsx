@@ -5,7 +5,7 @@ import './Login.css';
 
 export default function Login() {
   return (
-    <div className="A">
+    <div className="wrapper">
       <form action="#">
         <h2>Welcome</h2>
         <div className="input">
