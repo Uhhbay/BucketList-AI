@@ -57,7 +57,7 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
-        <Link to="/" className="flex items-center text-xl font-bold text-gray-800">
+        <Link to="/" className="flex items-center text-lg font-bold text-gray-800">
           BucketList AI
         </Link>
         <button className="sm:hidden" onClick={toggleMenu}>
@@ -90,17 +90,6 @@ export default function Navbar() {
             ))}
           </ul>
         </nav>
-        <div className="hidden sm:block">
-          {isLoggedIn ? (
-            <Link to="/profile" className="text-gray-800 hover:text-blue-600">
-              <FontAwesomeIcon icon={faUser} className="w-6 h-6" />
-            </Link>
-          ) : (
-            <Link to="/login" className="px-4 text-sm font-medium py-2 bg-blue-800 text-white rounded-xl hover:bg-blue-400 ease-in duration-100">
-              Login
-            </Link>
-          )}
-        </div>
       </motion.div>
     </header>
   );
