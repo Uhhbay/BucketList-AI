@@ -13,10 +13,10 @@
     box-sizing: border-box;
     font-family: sans-serif;
     width: 100%; 
-    max-width: 30rem; 
+    max-width: 25rem; 
     background: white; 
-    border-radius: 8px;
-    border: 1px solid grey; 
+    border-radius: 15px;
+    border: 2px solid grey; 
     color: black;
     display: flex;
     flex-direction: column;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './Login.css';
+import backgroundImg from "../../assets/airplanebg.jpeg";
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -37,7 +38,15 @@ export default function Login() {
 
 
   return (
-    <div className="login-container">
+    <div className="login-container"
+      style={{ 
+        backgroundImage: `url(${backgroundImg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        zIndex: -2,
+    }}
+    >
       <div className="wrapper">
         <form action="#" className='logForm'>
           <h2 className='welcome font-medium'>Welcome</h2>
