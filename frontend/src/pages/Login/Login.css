@@ -1,59 +1,60 @@
-.wrapper {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
-    
-}
-
-.wrapper {
-    width: 100%;
+.login-container {
+    min-height: 100vh; 
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 67.5rem;
-    padding: 0 0.625rem;
-    color: whitesmoke;
+    background: white;
+    background-size: cover;
 }
+
+.wrapper {
+    margin: 0;
+    padding: 1.875rem;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    width: 100%; 
+    max-width: 30rem; 
+    background: white; 
+    border-radius: 8px;
+    border: 1px solid grey; 
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
 
 .wrapper::before {
     content: "";
     position: absolute;
     width: 100%;
     height: 100%;
-    background: url("../../assets/loginBack.jpg") no-repeat center center;
     background-size: cover;
     z-index: -1;
 }
 
-.wrapper {
-    width: 30.625rem;
-    border-radius: 0.5;
-    padding: 1.875rem;
-    border: 1px solid grey; 
-    backdrop-filter: blur(0.5rem);
-}
 
-form {
+.logForm {
     display: flex;
     flex-direction: column;
 }
 
-h2 {
+.welcome {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: whitesmoke;
+    color: black;
 }
 
 .input {
     position: relative;
-    border-bottom: 2px solid whitesmoke;
+    border-bottom: 2px solid black;
     margin: 15px 0;
 }
 
 .input label {
     position: absolute;
-    color: whitesmoke;
+    color: black;
     top: 50%;
     left: 0;
     transform: translateY(-50%);
@@ -65,7 +66,7 @@ h2 {
 .input input {
     width: 100%;
     height: 2.5rem;
-    color: whitesmoke;
+    color: black;
     background: transparent;
     border: none;
     outline: none;
@@ -85,10 +86,11 @@ input input:focus~label,
     align-items: center;
     justify-content: space-between;
     margin: 25px 0 35px 0;
+    gap: 1rem;
 }
 
 #remember {
-    accent-color: whitesmoke;
+    accent-color: black;
 }
 
 .forgotten label {
@@ -97,24 +99,24 @@ input input:focus~label,
 }
 
 .forgotten label p {
-    margin-left: o.5rem;
+    margin-left: 0.5rem;
 }
 
 .wrapper a {
-    color: whitesmoke;
+    color: black;
     text-decoration: underline;
 
 }
 
-button {
-    background: whitesmoke;
-    color: black;
+.logButton {
+    background: #5093e2;
+    color: white;
     font-weight: 600;
     border: none;
     cursor: pointer;
     padding: 12px 20px;
     font-size: 1rem;
-    border: 2px solid grey;
+    border: 2px solid transparent;
     border-radius: 3px;
     transition: 0.3s ease;
 }
@@ -122,5 +124,16 @@ button {
 .register {
     text-align: center;
     margin-top: 30px;
-    color: whitesmoke;
+    color: black;
 }
+.register p {
+    display: inline;
+}
+
+.register a {
+    margin-left: 0.5rem; 
+}
+
+.logButton:hover {
+    background-color: #0056b3; 
+  }
