@@ -39,7 +39,7 @@ export default function Navbar() {
                 <Link
                   key={index}
                   to={link.path}
-                  className={`text-4xl ${activeSection === link.name ? "text-blue-600" : "text-gray-800"} hover:text-blue-400`}
+                  className={`text-4xl ${activeSection === link.name ? "text-sky-600" : "text-gray-800"} hover:text-sky-400`}
                   onClick={() => {
                     setActiveSection(link.name);
                     setIsOpen(false);
@@ -53,16 +53,24 @@ export default function Navbar() {
         )}
       </AnimatePresence>
       <motion.div 
-        className="flex items-center justify-between fixed top-0 left-0 h-16 w-full bg-white shadow-md px-4 sm:px-6"
+        className="flex items-center justify-between fixed top-0 left-0 h-16 w-full bg-white/70 backdrop-blur-sm shadow-md px-4 sm:px-6"
+        // style={{
+        //   boxShadow: '0 1px 6px rgba(0, 112, 243, 0.5)', // Blue shadow with opacity
+        // }}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
-        <Link to="/" className="flex items-center text-lg font-bold text-gray-800">
-          BucketList AI
+        <Link to="/" className="flex flex-col text-gray-800">
+          <h1 className="text-xl font-bold">
+            BucketList AI
+          </h1>
+          <h3 className="text-xs -mt-1">
+            Powered by fetch.ai
+          </h3>
         </Link>
         <button className="sm:hidden" onClick={toggleMenu}>
           <FontAwesomeIcon
-            className={`w-6 h-6 transition ${isOpen ? "text-blue-600" : "text-gray-800"}`}
+            className={`w-6 h-6 transition ${isOpen ? "text-sky-600" : "text-gray-800"}`}
             icon={faBars} 
           />
         </button>
@@ -73,14 +81,14 @@ export default function Navbar() {
                 <Link
                   to={link.path}
                   className={`px-3 py-2 rounded-md ${
-                    activeSection === link.name ? "text-blue-600 font-semibold" : "text-gray-800"
-                  } hover:text-blue-400`}
+                    activeSection === link.name ? "text-sky-600 font-semibold" : "text-gray-800"
+                  } hover:text-sky-400`}
                   onClick={() => setActiveSection(link.name)}
                 >
                   {link.name}
                   {link.name === activeSection && (
                     <motion.span
-                      className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"
+                      className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-600"
                       layoutId="activeSection"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
