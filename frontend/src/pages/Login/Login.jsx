@@ -21,8 +21,15 @@ export default function Login() {
                 <input type="checkbox" id="remember"/>
                 <p>Remember Me</p>
             </label>
+            <a href="#">Forgot Password</a>
         </div>
-
+        <button type="submit">Log In</button>
+        <div className="register">
+          <p>
+            Don't have an account?
+            <a href="#">Register</a>
+          </p>
+        </div>
       </form>
     </div>
   );
