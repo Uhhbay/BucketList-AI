@@ -13,7 +13,8 @@ load_dotenv()
 from dal import UserDAL, BucketList, BucketListItem
 
 # Configuration
-MONGODB_URI = os.environ["MONGODB_URI"]
+# MONGODB_URI = os.environ["MONGODB_URI"]
+MONGODB_URI = "mongodb+srv://bucket-user:bucketpassword@cluster0.yavlg.mongodb.net/bucketlist_db?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true&appName=Cluster0"
 DATABASE_NAME = "bucketlist_db"
 USER_COLLECTION = "users"
 BUCKET_COLLECTION = "buckets"
