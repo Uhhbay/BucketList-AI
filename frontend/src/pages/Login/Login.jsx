@@ -5,32 +5,34 @@ import './Login.css';
 
 export default function Login() {
   return (
-    <div className="wrapper">
-      <form action="#" className='logForm'>
-        <h2 className='welcome'>Welcome</h2>
-        <div className="input">
-            <input type="text" required/>
-            <label>Username</label>
-        </div>
-        <div className="input">
-            <input type="password" required/>
-            <label>Password</label>
-        </div>
-        <div className="forgotten">
-            <label for="remember">
-                <input type="checkbox" id="remember"/>
-                <p>Remember Me</p>
-            </label>
-            <a href="#">Forgot Password</a>
-        </div>
-        <button type="submit" className='logButton'>Log In</button>
-        <div className="register">
-          <p>
-            Don't have an account?  
-            <a href="#">Register</a>
-          </p>
-        </div>
-      </form>
+    <div className="login-container">
+      <div className="wrapper">
+        <form action="#" className='logForm'>
+          <h2 className='welcome'>Welcome</h2>
+          <div className="input">
+              <input type="text" required/>
+              <label>Username</label>
+          </div>
+          <div className="input">
+              <input type="password" required/>
+              <label>Password</label>
+          </div>
+          <div className="forgotten">
+              <label for="remember">
+                  <input type="checkbox" id="remember"/>
+                  <p>Remember Me</p>
+              </label>
+              <a href="#">Forgot Password</a>
+          </div>
+          <button type="submit" className='logButton'>Log In</button>
+          <div className="register">
+            <p>
+              Don't have an account?  
+              <a href="#">Register</a>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
