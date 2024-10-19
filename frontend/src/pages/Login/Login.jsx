@@ -7,7 +7,7 @@ export default function Login() {
     <div className="login-container">
       <div className="wrapper">
         <form action="#" className='logForm'>
-          <h2 className='welcome'>Welcome</h2>
+          <h2 className='welcome font-medium'>Welcome</h2>
           <div className="input">
               <input type="text" required/>
               <label>Username</label>
