@@ -10,49 +10,55 @@ export default function Dashboard() {
     const flights = [
         {
             airline: { name: 'Alaska Airlines', logo: 'https://m.media-amazon.com/images/I/51f3uYGjenL._h1_.png' },
-            time: '1:26 PM - 9:30 PM',
-            duration: '5 hr 4 min',
-            emissions: { value: 368, change: 14, label: '+14% emissions' },
+            departingDate: '04/21/2025',
+            arrivingDate: '05/25/2025',
+            departingAirport: 'LAX',
+            arrivingAirport: 'SYD',
             price: 605,
             details: ['Boeing 737', 'Meal included', 'Free Wi-Fi available']
         },
         {
             airline: { name: 'United Airlines', logo: 'https://ih1.redbubble.net/image.4826145001.4783/raf,360x360,075,t,fafafa:ca443f4786.jpg' },
-            time: '6:45 AM - 2:59 PM',
-            duration: '5 hr 14 min',
-            emissions: { value: 254, change: -21, label: '-21% emissions' },
+            departingDate: '04/21/2025',
+            arrivingDate: '05/25/2025',
+            departingAirport: 'LAX',
+            arrivingAirport: 'SYD',
             price: 613,
             details: ['Boeing 737', 'Extra legroom', 'In-flight entertainment']
         },
         {
             airline: { name: 'Delta Airlines', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDG3mx0ouDRNS5kGnGS6SxoO8r9nO369SBKw&s' },
-            time: '6:45 AM - 2:59 PM',
-            duration: '5 hr 14 min',
-            emissions: { value: 254, change: -21, label: '-21% emissions' },
+            departingDate: '04/21/2025',
+            arrivingDate: '05/25/2025',
+            departingAirport: 'LAX',
+            arrivingAirport: 'SYD',
             price: 613,
             details: ['Boeing 737', 'Extra legroom', 'In-flight entertainment']
         },
         {
             airline: { name: 'American Airlines', logo: 'https://external-preview.redd.it/noGVmHkGp3tV46SVyR3TSndGMlFp-2Vf3uLBm9UUZlY.png?auto=webp&s=fd18075339f5cf34ee0a7512ede6476c619a21cb' },
-            time: '6:45 AM - 2:59 PM',
-            duration: '5 hr 14 min',
-            emissions: { value: 368, change: 14, label: '+14% emissions' },
+            departingDate: '04/21/2025',
+            arrivingDate: '05/25/2025',
+            departingAirport: 'LAX',
+            arrivingAirport: 'SYD',
             price: 613,
             details: ['Boeing 737', 'Extra legroom', 'In-flight entertainment']
         },
         {
             airline: { name: 'Spirit Airlines', logo: 'https://i.etsystatic.com/11453548/r/il/8ec664/1689755000/il_570xN.1689755000_9e6k.jpg' },
-            time: '6:45 AM - 2:59 PM',
-            duration: '5 hr 14 min',
-            emissions: { value: 254, change: -21, label: '-21% emissions' },
+            departingDate: '04/21/2025',
+            arrivingDate: '05/25/2025',
+            departingAirport: 'LAX',
+            arrivingAirport: 'SYD',
             price: 613,
             details: ['Boeing 737', 'Extra legroom', 'In-flight entertainment']
         },
         {
             airline: { name: 'Korean Air', logo: 'https://i.pinimg.com/originals/79/2b/c9/792bc9f5ca882dd26d13bc5b0ac3337a.jpg' },
-            time: '6:45 AM - 2:59 PM',
-            duration: '5 hr 14 min',
-            emissions: { value: 368, change: 14, label: '+14% emissions' },
+            departingDate: '04/21/2025',
+            arrivingDate: '05/25/2025',
+            departingAirport: 'LAX',
+            arrivingAirport: 'SYD',
             price: 613,
             details: ['Boeing 737', 'Extra legroom', 'In-flight entertainment']
         },

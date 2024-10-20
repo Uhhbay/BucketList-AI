@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
 
-export default function FlightCard({ airline, time, duration, emissions, price, details }) {
+export default function FlightCard({ airline, departingDate, arrivingDate, departingAirport, arrivingAirport, price, details }) {
     const [expanded, setExpanded] = useState(false);
 
     const toggleExpand = () => setExpanded(!expanded);
@@ -17,41 +17,42 @@ export default function FlightCard({ airline, time, duration, emissions, price, 
                         className="w-12 h-12 rounded-md object-contain"
                     />
                     <div>
-                        <p className="text-lg font-semibold">{time}</p>
+                        <p className="text-xl font-semibold">{departingAirport} - {arrivingAirport}</p>
                         <p className="text-sm text-gray-600">{airline.name}</p>
                     </div>
                 </div>
 
-                <div className="text-center">
-                    <p className="font-medium">{duration}</p>
-                    <p className="text-sm text-gray-500">Nonstop</p>
+                <div className="flex gap-20 text-center">
+                    <div>
+                        <p className="text-md font-bold">{departingDate}</p>
+                        <p className="text-sm text-gray-500">Departure</p>
+                    </div>
+                    <div>
+                        <p className="text-md font-bold">{arrivingDate}</p>
+                        <p className="text-sm text-gray-500">Arrival</p>
+                    </div>
                 </div>
 
-                <div className="text-center">
-                    <p className={`font-medium ${emissions.change > 0 ? 'text-red-500' : 'text-green-500'}`}>
-                        {emissions.value} kg CO₂e
-                    </p>
-                    <p className="text-sm">{emissions.label}</p>
+                <div className="flex text-right">
+                    <div>
+                        <p className="text-lg font-semibold">${price}</p>
+                        <p className="text-sm text-gray-500">Round Trip</p>
+                    </div>
+                    <div className="ml-2 mt-2">
+                        {expanded ? (
+                            <MdExpandLess size={28} />
+                        ) : (
+                            <MdExpandMore size={28} />
+                        )}
+                    </div>
                 </div>
 
-                <div className="text-right">
-                    <p className="text-lg font-semibold">${price}</p>
-                    <p className="text-sm text-gray-500">Round Trip</p>
-                </div>
-
-                <div className="ml-2">
-                    {expanded ? (
-                        <MdExpandLess size={28} />
-                    ) : (
-                        <MdExpandMore size={28} />
-                    )}
-                </div>
             </div>
 
             {/* Expandable section */}
             {expanded && (
                 <div className="mt-4 border-t pt-4">
-                    <p className="text-sm text-gray-700">Flight Details:</p>
+                    <p className="text-sm text-gray-70 font-bold flex items-center">Trip Details:</p>
                     <ul className="list-disc list-inside text-sm text-gray-600">
                         {details.map((detail, index) => (
                             <li key={index}>{detail}</li>
