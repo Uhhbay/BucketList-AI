@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, status, Depends, Request, Response, 
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.middleware.cors import CORSMiddleware
-from amadeus import search_cheapest_flights
+from api.amadeus import search_cheapest_flights
 from contextlib import asynccontextmanager
 import os
 import sys
