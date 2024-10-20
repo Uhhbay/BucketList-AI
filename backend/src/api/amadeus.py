@@ -27,7 +27,7 @@ def get_access_token():
         raise HTTPException(status_code=response.status_code, detail="Failed to authenticate with Amadeus API")
 
 
-def search_cheapest_flights(origin: str, max_price: int = None, duration: str = None):
+def search_cheapest_flights(origin: str, max_price: int = None, duration: str = "7 days"):
     access_token = get_access_token()
     url = f"{AMADEUS_BASE_URL}/v1/shopping/flight-destinations"
     headers = {"Authorization": f"Bearer {access_token}"}
