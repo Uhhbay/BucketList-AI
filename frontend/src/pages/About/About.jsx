@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './About.css';
 import Flowchart from '../../assets/Flowchart.png'
 import johnPic from '../../assets/JohnVu.jpeg'
+import AndrewPic from '../../assets/Andrew_Ho.jpeg'
 
 
 export default function About() {
@@ -27,7 +28,7 @@ export default function About() {
                     <img src={ johnPic } alt="Circle 1" />
                 </div>
                 <div className="circle">
-                    <img src="https://via.placeholder.com/150" alt="Circle 2" />
+                    <img src={ AndrewPic } alt="Circle 2" />
                 </div>
                 <div className="circle">
                     <img src="https://via.placeholder.com/150" alt="Circle 3" />
