@@ -1,6 +1,6 @@
 .popup-container {
     width: 300px;
-    padding: 16px;
+    padding: 12px;
     text-align: center;
     font-family: Arial, sans-serif;
 }
@@ -10,16 +10,30 @@ h1 {
     margin-bottom: 8px;
 }
 
+h3 {
+    margin-top: 30px;
+}
+
 button {
     margin-top: 12px;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #187df1;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 14px;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #5da9ff;
+    transition: ease-in;
+    
+}
+
+select {
+    padding: 6px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
 }

@@ -76,6 +76,22 @@ class NewItemResponse(BaseModel):
 class ItemUpdate(BaseModel):
     completed: bool
 
+class Price(BaseModel):
+    total: float
+
+class Links(BaseModel):
+    flightDates: str
+    flightOffers: str
+
+class FlightInfo(BaseModel):
+    type: str
+    origin: str
+    destination: str
+    departureDate: str
+    returnDate: str
+    price: Price
+    links: Links
+
 # Helper function to create session and set cookie
 def create_session(response: Response, bucket_id: str):
     session_id = str(uuid.uuid4())  # Generate a unique session ID
@@ -169,20 +185,21 @@ async def delete_item(item_id: str, request: Request):
     return bucket
 
 #AMADEUS GETTER
-@app.get("/search-cheapest-flights")
+@app.get("/search-cheapest-flights", response_model=BucketList)
 def get_cheapest_flights(
     origin: str,
     max_price: int = Query(None, description="Maximum price filter for flights"),
-    duration: str = Query(None, description="Maximum duration filter (e.g., '5H', '10H') for flights"),
+    duration: str = Query("7 days", description="Maximum duration filter (e.g., '5H', '10H') for flights"),
 ):
     return search_cheapest_flights(origin, max_price, duration)
 
+@app.get("/")
+def root_page():
+    return "Hello from root!"
+
 # Main function to start the server
-def main(argv=sys.argv[1:]):
-    try:
-        uvicorn.run("server:app", host="127.0.0.1", port=3001, reload=DEBUG)
-    except KeyboardInterrupt:
-        pass
+def main():
+    uvicorn.run("server:app", host="127.0.0.1", port=3001, reload=DEBUG)
 
 if __name__ == "__main__":
     main()

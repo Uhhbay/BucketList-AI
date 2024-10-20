@@ -48,7 +48,7 @@ export default function Home() {
                 <h1 className="text-3xl sm:text-5xl font-semibold">BucketList AI</h1>
                 <h4 className="text-md sm:text-2xl font-sm mt-1">Emphasis on smooth, optimized travel planning.</h4>
 
-                <button onClick={handleGetStarted} className="mt-8 px-4 text-sm font-medium sm:font-semibold py-2 bg-sky-600 text-white rounded-xl hover:bg-sky-400 ease-in duration-100">
+                <button onClick={handleGetStarted} className="shadow-md mt-8 px-4 text-sm font-medium sm:font-semibold py-2 bg-sky-600 text-white rounded-xl hover:bg-sky-400 ease-in duration-100">
                     Click here to get started
                 </button>
             </div>
