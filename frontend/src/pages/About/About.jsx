@@ -3,6 +3,7 @@ import './About.css';
 import Flowchart from '../../assets/Flowchart.png'
 import johnPic from '../../assets/JohnVu.jpeg'
 import AndrewPic from '../../assets/Andrew_Ho.jpeg'
+import AbhayPic from '../../assets/AbhaySingh.jpg'
 
 
 export default function About() {
@@ -21,7 +22,9 @@ export default function About() {
                 />
             </div>
             <p className="about-info">
-            Our team is dedicated to continuously improving and providing the best possible solutions to our customers. We believe in the power of technology and innovation to bring positive change to the world.
+            Our project aims to create a user-friendly interface that allows people to list their bucket list items and receive tailored itineraries when cheap flights to relevant
+             destinations are available. To do this we trained three FetchAI agents built with OpenAI assigned different tasks and implemented to interact with each other to take in 
+             flight information, bucket list data, create a connection to destinations, find cheap flights to destinations that could help a person complete their bucket list item, and alert the user about it.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-10">
                 <div className="circle">
@@ -34,7 +37,7 @@ export default function About() {
                     <img src="https://via.placeholder.com/150" alt="Circle 3" />
                 </div>
                 <div className="circle">
-                    <img src="https://via.placeholder.com/150" alt="Circle 4" />
+                    <img src={AbhayPic} alt="Circle 4" />
                 </div>
             </div>
         </div>
