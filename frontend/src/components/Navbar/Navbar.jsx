@@ -107,14 +107,15 @@ export default function Navbar() {
           <ul className="flex space-x-3">
             {links.map((link) => (
               <motion.li key={link.path} className="relative">
-                <Link
-                  to={link.path}
+                <button
                   className={`px-1 rounded-md ${
                     activeSection === link.name ? "text-sky-600 font-semibold" : "text-gray-800"
                   } hover:text-sky-400`}
-                  onClick={(e) => {
-                    if (link.path === "/dashboard") {
+                  onClick={() => {
+                    if (link.path === '/dashboard') {
                       handleDashboard();
+                    } else {
+                      navigate(link.path);
                     }
                     setActiveSection(link.name);
                   }}
@@ -127,7 +128,7 @@ export default function Navbar() {
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </Link>
+                </button>
               </motion.li>
             ))}
           </ul>
