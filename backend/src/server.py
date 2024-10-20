@@ -177,12 +177,13 @@ def get_cheapest_flights(
 ):
     return search_cheapest_flights(origin, max_price, duration)
 
+@app.get("/")
+def root_page():
+    return "Hello from root!"
+
 # Main function to start the server
-def main(argv=sys.argv[1:]):
-    try:
-        uvicorn.run("server:app", host="127.0.0.1", port=3001, reload=DEBUG)
-    except KeyboardInterrupt:
-        pass
+def main():
+    uvicorn.run("server:app", host="127.0.0.1", port=3001, reload=DEBUG)
 
 if __name__ == "__main__":
     main()
