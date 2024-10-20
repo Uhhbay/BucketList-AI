@@ -8,14 +8,14 @@ load_dotenv()
 
 AMADEUS_CLIENT_ID = os.getenv("AMADEUS_CLIENT_ID")
 AMADEUS_CLIENT_SECRET = os.getenv("AMADEUS_CLIENT_SECRET")
-AMADEUS_BASE_URL = "https://test.api.amadeus.com"
+AMADEUS_BASE_URL = "https://test.api.amadeus.com/v1"
 
 assert AMADEUS_CLIENT_ID is not None
 assert AMADEUS_CLIENT_SECRET is not None
 
 # Function to retrieve access token
 def get_access_token():
-    url = f"{AMADEUS_BASE_URL}/v1/security/oauth2/token"
+    url = f"{AMADEUS_BASE_URL}/security/oauth2/token"
     data = {
         "grant_type": "client_credentials",
         "client_id": AMADEUS_CLIENT_ID,
@@ -30,7 +30,7 @@ def get_access_token():
 # Function to search for the cheapest flights
 def search_cheapest_flights(origin: str, max_price: int = None):
     access_token = get_access_token()
-    url = f"{AMADEUS_BASE_URL}/v1/shopping/flight-destinations"
+    url = f"{AMADEUS_BASE_URL}/shopping/flight-destinations"
     headers = {"Authorization": f"Bearer {access_token}"}
     
     # Generate a list of dates over the next 6 months (every 15 days)

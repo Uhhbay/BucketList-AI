@@ -79,6 +79,7 @@ class NewItemResponse(BaseModel):
 class ItemUpdate(BaseModel):
     completed: bool
 
+
 class Price(BaseModel):
     total: float
 
@@ -93,6 +94,9 @@ class FlightInfo(BaseModel):
     departureDate: str
     price: float
 
+
+class FlightResponse(BaseModel):
+    data: list[FlightInfo]
 
 # Helper function to create session and set cookie
 def create_session(response: Response, bucket_id: str):
