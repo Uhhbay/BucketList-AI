@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './About.css';
 import Flowchart from '../../assets/Flowchart.png'
+import johnPic from '../../assets/JohnVu.jpeg'
 
 
 export default function About() {
@@ -21,9 +22,9 @@ export default function About() {
             <p className="about-info">
             Our team is dedicated to continuously improving and providing the best possible solutions to our customers. We believe in the power of technology and innovation to bring positive change to the world.
             </p>
-            <div className="circle-container">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-10">
                 <div className="circle">
-                    <img src="https://via.placeholder.com/150" alt="Circle 1" />
+                    <img src={ johnPic } alt="Circle 1" />
                 </div>
                 <div className="circle">
                     <img src="https://via.placeholder.com/150" alt="Circle 2" />
