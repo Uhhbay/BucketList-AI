@@ -33,8 +33,38 @@ async function checkForUpdates() {
     }
 }
 
-// Set an alarm to run the update check every 24 hours
-chrome.alarms.create('checkForUpdates', { periodInMinutes: 1440 });
+// Set an alarm based on the user’s frequency preference
+function setAlarm(frequency) {
+    let periodInMinutes;
+
+    switch (frequency) {
+        case 'daily':
+            periodInMinutes = 1440; // 24 hours
+            break;
+        case 'weekly':
+            periodInMinutes = 10080; // 7 days
+            break;
+        case 'monthly':
+            periodInMinutes = 43200; // 30 days
+            break;
+        case '6-months':
+            periodInMinutes = 262800; // 6 months
+            break;
+        default:
+            periodInMinutes = 1440; // Default to 24 hours
+    }
+
+    chrome.alarms.create('checkForUpdates', { periodInMinutes });
+}
+
+// Listen for changes in frequency settings
+chrome.storage.onChanged.addListener((changes) => {
+    if (changes.frequency?.newValue) {
+        chrome.alarms.clear('checkForUpdates', () => {
+            setAlarm(changes.frequency.newValue);
+        });
+    }
+});
 
 // Listen for the alarm event
 chrome.alarms.onAlarm.addListener((alarm) => {
