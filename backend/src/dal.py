@@ -89,6 +89,16 @@ class UserDAL:
         )
 
         return BucketList.from_doc(res) if res else None
+    
+    async def delete_item(self, bucket_id: str, item_id: str, session=None) -> Optional[BucketList]:
+        result = await self._bucket_collection.find_one_and_update(
+            {"_id": ObjectId(bucket_id)},
+            {"$pull": {"items": {"id": item_id}}},  # Remove the item by its id
+            session=session,
+            return_document=ReturnDocument.AFTER,  # Return the updated document
+        )
+
+        return BucketList.from_doc(result) if result else None
 
     async def get_user_by_username(self, username: str, session=None) -> Optional[User]:
         """Retrieve a user by their username."""
