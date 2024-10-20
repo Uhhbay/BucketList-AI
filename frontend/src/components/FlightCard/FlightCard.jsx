@@ -22,7 +22,7 @@ export default function FlightCard({ airline, departingDate, arrivingDate, depar
                     </div>
                 </div>
 
-                <div className="flex gap-20 text-center">
+                <div className="flex gap-1 sm:gap-10 md:gap-15 lg:gap-20 text-center">
                     <div>
                         <p className="text-md font-bold">{departingDate}</p>
                         <p className="text-sm text-gray-500">Departure</p>
