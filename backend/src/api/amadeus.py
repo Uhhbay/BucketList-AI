@@ -16,20 +16,22 @@ assert AMADEUS_CLIENT_SECRET is not None
 # Function to retrieve access token
 def get_access_token():
     url = f"{AMADEUS_BASE_URL}/security/oauth2/token"
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
     data = {
         "grant_type": "client_credentials",
         "client_id": AMADEUS_CLIENT_ID,
         "client_secret": AMADEUS_CLIENT_SECRET
     }
-    response = requests.post(url, data=data)
+    response = requests.post(url, data=data, headers=headers)
     if response.status_code == 200:
         return response.json().get("access_token")
     else:
         raise HTTPException(status_code=response.status_code, detail="Failed to authenticate with Amadeus API")
 
 # Function to search for the cheapest flights
-def search_cheapest_flights(origin: str, max_price: int = None):
-    access_token = get_access_token()
+def search_cheapest_flights(origin: str, max_price: int = None, access_token: str = ""):
     url = f"{AMADEUS_BASE_URL}/shopping/flight-destinations"
     headers = {"Authorization": f"Bearer {access_token}"}
     

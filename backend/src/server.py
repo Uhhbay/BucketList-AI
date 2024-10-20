@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, status, Depends, Request, Response, 
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.middleware.cors import CORSMiddleware
-from api.amadeus import search_cheapest_flights
+from api.amadeus import get_access_token, search_cheapest_flights
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from typing import List
@@ -78,7 +78,6 @@ class NewItemResponse(BaseModel):
 
 class ItemUpdate(BaseModel):
     completed: bool
-
 
 class Price(BaseModel):
     total: float
@@ -193,11 +192,13 @@ async def delete_item(item_id: str, request: Request):
 @app.get("/search-cheapest-flights")
 async def get_cheapest_flights(
     origin: str,
-    max_price: int = Query(None, description="Maximum price filter for flights")
+    max_price: int = Query(None, description="Maximum price filter for flights"),
+    access_token: str = ""
+
 ):
     try:
         # Call the Amadeus API to search for flights
-        flights = search_cheapest_flights(origin, max_price)
+        flights = search_cheapest_flights(origin, max_price, access_token)
 
         # Insert each flight into MongoDB and return the inserted documents
         inserted_flights = []
@@ -209,6 +210,11 @@ async def get_cheapest_flights(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching flights: {e}")
+
+@app.get("/access-token")
+def access_token():
+    print(get_access_token())
+
 
 
 @app.get("/")
