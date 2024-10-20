@@ -115,7 +115,7 @@ export default function Dashboard() {
                         </form>
                         <div className="mt-12 m-3 flex gap-6 font-semibold border-b-2 border-gray-600">
                             <h3 className="flex-grow">BucketList Item</h3>
-                            <h3 className="text-right">Remove</h3>
+                            <h3 className="text-right">Actions</h3>
                         </div>
                         <ul className="p-2">
                             {items.map((item, index) => (
@@ -125,7 +125,7 @@ export default function Dashboard() {
                                     </button>
                                     <span className={`flex-grow ${item.completed ? 'line-through' : ''}`}>{item.description}</span>
                                     <div>
-                                        <button onClick={() => handleDelete(item.id)} className="mr-1"><FaRegTrashAlt size={24} /></button>
+                                        <button onClick={() => handleDelete(item.id)} className="mr-1"><FaRegTrashAlt size={22} /></button>
                                     </div>
                                 </li>
                             ))}
