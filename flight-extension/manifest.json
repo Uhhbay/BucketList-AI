@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "BucketList AI Extension",
+    "description": "Check for flight updates matching your bucket list.",
+    "version": "1.0",
+    "permissions": ["alarms", "notifications", "storage", "activeTab", "fetch"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  
