@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { MdCheckBoxOutlineBlank, MdCheckBox } from "react-icons/md";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function Dashboard() {
     const [items, setItems] = useState([]);
@@ -112,20 +114,18 @@ export default function Dashboard() {
                             </div>
                         </form>
                         <div className="mt-12 m-3 flex gap-6 font-semibold border-b-2 border-gray-600">
-                            <h3 className="text-center">No.</h3>
                             <h3 className="flex-grow">BucketList Item</h3>
-                            <h3 className="text-right">Actions</h3>
+                            <h3 className="text-right">Remove</h3>
                         </div>
                         <ul className="p-2">
                             {items.map((item, index) => (
                                 <li className="flex gap-6 items-center" key={item.id}>
-                                    <span className="w-8 text-center">{index + 1}:</span>
+                                    <button onClick={() => handleCompleteToggle(item.id, item.completed)} className="ml-1 text-center">
+                                        {item.completed ? <MdCheckBox size={24} /> : <MdCheckBoxOutlineBlank size={24} />}
+                                    </button>
                                     <span className={`flex-grow ${item.completed ? 'line-through' : ''}`}>{item.description}</span>
                                     <div>
-                                        <button onClick={() => handleCompleteToggle(item.id, item.completed)} className="mr-2">
-                                            {item.completed ? '❌' : '✅'}
-                                        </button>
-                                        <button onClick={() => handleDelete(item.id)}>🗑️</button>
+                                        <button onClick={() => handleDelete(item.id)} className="mr-1"><FaRegTrashAlt size={24} /></button>
                                     </div>
                                 </li>
                             ))}
