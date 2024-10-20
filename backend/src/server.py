@@ -4,6 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.middleware.cors import CORSMiddleware
 from api.amadeus import search_cheapest_flights
 from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+from typing import List
 import os
 import sys
 import uvicorn
@@ -83,14 +85,13 @@ class Links(BaseModel):
     flightDates: str
     flightOffers: str
 
+# FlightInfo model
 class FlightInfo(BaseModel):
-    type: str
     origin: str
     destination: str
     departureDate: str
-    returnDate: str
-    price: Price
-    links: Links
+    price: float
+
 
 # Helper function to create session and set cookie
 def create_session(response: Response, bucket_id: str):
@@ -184,14 +185,21 @@ async def delete_item(item_id: str, request: Request):
 
     return bucket
 
-#AMADEUS GETTER
-@app.get("/search-cheapest-flights", response_model=BucketList)
-def get_cheapest_flights(
+@app.get("/search-cheapest-flights")
+async def get_cheapest_flights(
     origin: str,
-    max_price: int = Query(None, description="Maximum price filter for flights"),
-    duration: str = Query("7 days", description="Maximum duration filter (e.g., '5H', '10H') for flights"),
+    max_price: int = Query(None, description="Maximum price filter for flights")
 ):
-    return search_cheapest_flights(origin, max_price, duration)
+    try:
+        # Call the Amadeus API to search for flights
+        flights = search_cheapest_flights(origin, max_price)  # Only pass origin and max_price
+        
+        return flights
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching flights: {e}")
+
+
 
 @app.get("/")
 def root_page():
