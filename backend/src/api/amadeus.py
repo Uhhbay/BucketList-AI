@@ -3,9 +3,15 @@ import os
 from fastapi import HTTPException
 from datetime import datetime, timedelta
 
+from dotenv import load_dotenv
+load_dotenv()
+
 AMADEUS_CLIENT_ID = os.getenv("AMADEUS_CLIENT_ID")
 AMADEUS_CLIENT_SECRET = os.getenv("AMADEUS_CLIENT_SECRET")
 AMADEUS_BASE_URL = "https://test.api.amadeus.com"
+
+assert AMADEUS_CLIENT_ID is not None
+assert AMADEUS_CLIENT_SECRET is not None
 
 def get_access_token():
     url = f"{AMADEUS_BASE_URL}/v1/security/oauth2/token"
