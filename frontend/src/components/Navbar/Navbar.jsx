@@ -70,9 +70,6 @@ export default function Navbar() {
                   to={link.path}
                   className={`text-4xl ${activeSection === link.name ? "text-sky-600" : "text-gray-800"} hover:text-sky-400`}
                   onClick={() => {
-                    if (link.path === "/dashboard") {
-                      handleDashboard();
-                    } 
                     setActiveSection(link.name);
                     setIsOpen(false);
                   }}
@@ -112,11 +109,12 @@ export default function Navbar() {
                     activeSection === link.name ? "text-sky-600 font-semibold" : "text-gray-800"
                   } hover:text-sky-400`}
                   onClick={() => {
-                    if (link.path === '/dashboard') {
-                      handleDashboard();
-                    } else {
-                      navigate(link.path);
-                    }
+                    // if (link.path === '/dashboard') {
+                    //   handleDashboard();
+                    // } else {
+                    //   navigate(link.path);
+                    // }
+                    navigate(link.path);
                     setActiveSection(link.name);
                   }}
                 >

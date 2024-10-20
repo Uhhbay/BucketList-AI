@@ -78,6 +78,7 @@ class NewItemResponse(BaseModel):
 class ItemUpdate(BaseModel):
     completed: bool
 
+
 class Price(BaseModel):
     total: float
 
@@ -92,6 +93,9 @@ class FlightInfo(BaseModel):
     departureDate: str
     price: float
 
+
+class FlightResponse(BaseModel):
+    data: list[FlightInfo]
 
 # Helper function to create session and set cookie
 def create_session(response: Response, bucket_id: str):
@@ -198,8 +202,6 @@ async def get_cheapest_flights(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching flights: {e}")
-
-
 
 @app.get("/")
 def root_page():
