@@ -52,7 +52,7 @@ export default function FlightCard({ airline, departingDate, arrivingDate, depar
             {/* Expandable section */}
             {expanded && (
                 <div className="mt-4 border-t pt-4">
-                    <p className="text-sm text-gray-70 font-bold flex items-center">Trip Details:</p>
+                    <p className="text-sm text-gray-70 font-bold flex items-center">Itinerary Details:</p>
                     <ul className="list-disc list-inside text-sm text-gray-600">
                         {details.map((detail, index) => (
                             <li key={index}>{detail}</li>
