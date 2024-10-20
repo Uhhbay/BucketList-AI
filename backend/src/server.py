@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, status, Depends, Request, Response, Query
 from pydantic import BaseModel
+from api.openai_handler import router as openai_router
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.middleware.cors import CORSMiddleware
 from api.amadeus import get_access_token, search_cheapest_flights
@@ -49,7 +50,8 @@ async def lifespan(app: FastAPI):
     # Shutdown
     client.close()
 
-app = FastAPI(lifespan=lifespan, debug=DEBUG)
+app = FastAPI(lifespan=lifespan)
+app.include_router(openai_router, prefix="/api/openai")
 
 # Enable CORS
 app.add_middleware(
@@ -228,7 +230,15 @@ def root_page():
 
 # Main function to start the server
 def main():
-    uvicorn.run("server:app", host="127.0.0.1", port=3001, reload=DEBUG)
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=3001,
+        log_level="info",
+        access_log=True,
+        use_colors=True,
+        proxy_headers=True,
+    )
 
 if __name__ == "__main__":
     main()

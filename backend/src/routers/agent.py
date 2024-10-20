@@ -25,7 +25,9 @@ async def get_itinerary(req: Request):
             message=model,
             timeout=10.0
         )
-        print(res.decode_payload())
+        # print(res.decode_payload())
+
+
     except Exception as e:
         return f"Unsuccessful agent call {str(e)}"
 

@@ -1,9 +1,12 @@
 from openai import OpenAI
+from fastapi import APIRouter
 import httpx
 import asyncio
 
 import os
 from dotenv import load_dotenv
+
+router = APIRouter()
 
 load_dotenv(override=True)
 API_KEY = os.getenv("OPENAI_API_KEY", "NOKEY")
@@ -53,6 +56,37 @@ class OpenAI:
 async def temp():
     a = await OpenAI.get_itinerary_data("seoul", ["cocacola", "taj mahal"])
     print(a["choices"][0]["message"]["content"])
+
+def parseGPT(content: str) -> dict[str]:
+    content_split = content.split("**")
+    titles = []
+    content = []
+
+    for val in content_split[1::2]:
+        titles.append(val.strip())
+
+    for val in content_split[2::2]:
+        content.append(val.strip("0123456789.: \n"))
+
+    if len(content) > len(titles):
+        content = content[:-1]
+    if len(content) > 0:
+        content[-1] = content[-1][:content[-1].find("\n\n")]
+    
+    end = dict(zip(titles, content))
+    return end
+
+@router.post("/get_itinerary")
+async def get_itinerary(location: str, bucket_list: list[str]):
+    print(location, bucket_list)
+    itinerary_data = await OpenAI.get_itinerary_data(location, bucket_list)
+    data_content = None
+
+    if "choices" in itinerary_data:
+        data_content = itinerary_data["choices"][0]["message"]["content"]
+        data_content = parseGPT(data_content)
+    
+    return data_content
 
 if __name__ == "__main__":
     asyncio.run(temp())
