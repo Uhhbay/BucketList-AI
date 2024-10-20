@@ -193,7 +193,7 @@ async def delete_item(item_id: str, request: Request):
 async def get_cheapest_flights(
     origin: str,
     max_price: int = Query(None, description="Maximum price filter for flights"),
-    access_token: str = ""
+    access_token: str = "",
 
 ):
     try:
@@ -214,8 +214,6 @@ async def get_cheapest_flights(
 @app.get("/access-token")
 def access_token():
     print(get_access_token())
-
-
 
 @app.get("/")
 def root_page():
