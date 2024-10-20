@@ -201,10 +201,17 @@ async def get_cheapest_flights(
         flights = search_cheapest_flights(origin, max_price, access_token)
 
         # Insert each flight into MongoDB and return the inserted documents
+        dest_list = []
         inserted_flights = []
         for flight in flights:
-            inserted_flight = await app.user_dal.save_flight_data(flight)  # Save the entire flight JSON into MongoDB
-            inserted_flights.append(inserted_flight)
+            #check destination 
+            destination = flight.get("destination")
+            if destination not in dest_list:
+                dest_list.append(destination)
+                inserted_flight = await app.user_dal.save_flight_data(flight)  # Save the entire flight JSON into MongoDB
+                inserted_flights.append(inserted_flight)
+            if len(dest_list) == 6:
+                break
 
         return inserted_flights
 
