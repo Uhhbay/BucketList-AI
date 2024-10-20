@@ -118,7 +118,7 @@ async def login_user(user: UserLogin, response: Response):
     create_session(response, db_user.bucket_id)
     print(f"User logged in - ID: {db_user.id}, Username: {db_user.username}")
 
-    return {"message": "Login successful", "bucket_id": db_user.bucket_id}
+    return {"message": "Login successful", "user_id": str(db_user.id)}
 
 # Get current bucket_id from session
 def get_current_bucket_id(request: Request) -> str:
