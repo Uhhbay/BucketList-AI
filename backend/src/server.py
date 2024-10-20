@@ -16,11 +16,11 @@ load_dotenv()
 from dal import UserDAL, BucketList, BucketListItem
 
 # Configuration
-# MONGODB_URI = os.environ["MONGODB_URI"]
-MONGODB_URI = "mongodb+srv://bucket-user:bucketpassword@cluster0.yavlg.mongodb.net/bucketlist_db?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true&appName=Cluster0"
+MONGODB_URI = os.environ["MONGODB_URI"]
 DATABASE_NAME = "bucketlist_db"
 USER_COLLECTION = "users"
 BUCKET_COLLECTION = "buckets"
+FLIGHT_COLLECTION = "flights"
 SESSION_COOKIE_NAME = "session_id"
 DEBUG = os.environ.get("DEBUG", "").strip().lower() in {"1", "true", "on", "yes"}
 
@@ -40,7 +40,8 @@ async def lifespan(app: FastAPI):
 
     user_collection = database.get_collection(USER_COLLECTION)
     bucket_collection = database.get_collection(BUCKET_COLLECTION)
-    app.user_dal = UserDAL(user_collection, bucket_collection)
+    flight_collection = database.get_collection(FLIGHT_COLLECTION)
+    app.user_dal = UserDAL(user_collection, bucket_collection, flight_collection)
 
     # Yield back to FastAPI Application
     yield
@@ -192,13 +193,18 @@ async def get_cheapest_flights(
 ):
     try:
         # Call the Amadeus API to search for flights
-        flights = search_cheapest_flights(origin, max_price)  # Only pass origin and max_price
-        
-        return flights
+        flights = search_cheapest_flights(origin, max_price)
+
+        # Insert each flight into MongoDB and return the inserted documents
+        inserted_flights = []
+        for flight in flights:
+            inserted_flight = await app.user_dal.save_flight_data(flight)  # Save the entire flight JSON into MongoDB
+            inserted_flights.append(inserted_flight)
+
+        return inserted_flights
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching flights: {e}")
-
 
 
 @app.get("/")

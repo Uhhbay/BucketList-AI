@@ -57,9 +57,10 @@ class BucketList(BaseModel):
 
 # Data Access Layer (DAL)
 class UserDAL:
-    def __init__(self, user_collection: AsyncIOMotorCollection, bucket_collection: AsyncIOMotorCollection):
+    def __init__(self, user_collection: AsyncIOMotorCollection, bucket_collection: AsyncIOMotorCollection, flight_collection: AsyncIOMotorCollection):
         self._user_collection = user_collection
         self._bucket_collection = bucket_collection
+        self._flight_collection = flight_collection
 
     async def create_user(self, username: str, password: str, session=None) -> User:
         """Create a new user with a unique bucket list."""
@@ -131,3 +132,18 @@ class UserDAL:
         """Retrieve the bucket list by its ID."""
         doc = await self._bucket_collection.find_one({"_id": ObjectId(bucket_id)}, session=session)
         return BucketList.from_doc(doc) if doc else None
+
+    async def save_flight_data(self, flight_data: dict):
+        """Store flight data in the flight collection as JSON and convert _id to string"""
+        response = await self._flight_collection.insert_one(flight_data)
+        # Return the inserted document with _id as string
+        flight_data["_id"] = str(response.inserted_id)
+        return flight_data
+
+    # New method to retrieve flights from MongoDB and convert _id to string
+    async def get_flights(self):
+        flights = []
+        async for flight in self._flight_collection.find():
+            flight["_id"] = str(flight["_id"])  # Convert ObjectId to string
+            flights.append(flight)
+        return flights
