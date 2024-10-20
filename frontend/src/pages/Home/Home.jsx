@@ -1,13 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import backgroundImg from "../../assets/airplanebg.jpeg";
 
 export default function Home() {
     const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Check session validity on component mount
+        const checkSession = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/session', {
+                    method: 'GET',
+                    credentials: 'include',  // Ensure cookies are included
+                });
+
+                if (response.ok) {
+                    setIsLoggedIn(true);
+                }
+            } catch (error) {
+                console.error('Session check failed', error);
+            }
+        };
+
+        checkSession();
+    }, []);
 
     const handleGetStarted = () => {
-        const isLoggedIn = localStorage.getItem('bucketlist-token');;
-
         if (isLoggedIn) {
             navigate('/dashboard');
         } else {
