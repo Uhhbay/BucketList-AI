@@ -1,14 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Dashboard() {
     const [items, setItems] = useState([]);
     const [inputValue, setInputValue] = useState('');
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/bucket', {
+                    method: 'GET',
+                    credentials: 'include', 
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setItems(data.items); 
+                } else {
+                    console.error('Failed to fetch items');
+                }
+            } catch (error) {
+                console.error('Error fetching items:', error);
+            }
+        };
+
+        fetchItems();
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (inputValue.trim() !== '') {
-            setItems([...items, inputValue]);
-            setInputValue('');
+        if (inputValue.trim() === '') return;
+
+        try {
+            const response = await fetch('http://localhost:3001/api/bucket/items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', 
+                body: JSON.stringify({ description: inputValue }),
+            });
+
+            if (response.ok) {
+                const newItem = await response.json();
+                setItems((prevItems) => [...prevItems, newItem]); // Add new item to list
+                setInputValue(''); // Clear input field
+            } else {
+                console.error('Failed to add item');
+            }
+        } catch (error) {
+            console.error('Error adding item:', error);
+        }
+    }
+
+    const handleCompleteToggle = async (itemId, completed) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/bucket/items/${itemId}/completed`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // Ensure cookies are sent
+                body: JSON.stringify({ completed: !completed }),
+            });
+
+            if (response.ok) {
+                setItems((prevItems) =>
+                    prevItems.map((item) =>
+                        item.id === itemId ? { ...item, completed: !completed } : item
+                    )
+                );
+            } else {
+                console.error('Failed to update item');
+            }
+        } catch (error) {
+            console.error('Error updating item:', error);
+        }
+    }
+
+    const handleDelete = async (itemId) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/bucket/items/${itemId}`, {
+                method: 'DELETE',
+                credentials: 'include', // Ensure cookies are sent
+            });
+
+            if (response.ok) {
+                setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+            } else {
+                console.error('Failed to delete item');
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error);
         }
     }
 
@@ -34,14 +112,21 @@ export default function Dashboard() {
                             </div>
                         </form>
                         <div className="mt-12 m-3 flex gap-6 font-semibold border-b-2 border-gray-600">
-                            <h3>No.</h3>
-                            <h3>Bucket Item</h3>
+                            <h3 className="text-center">No.</h3>
+                            <h3 className="flex-grow">BucketList Item</h3>
+                            <h3 className="text-right">Actions</h3>
                         </div>
                         <ul className="p-2">
                             {items.map((item, index) => (
-                                <li className="flex gap-6 items-center" key={index}>
-                                    <span className="w-8 text-center">{index + 1}</span>
-                                    <span className="flex-grow">{item}</span>
+                                <li className="flex gap-6 items-center" key={item.id}>
+                                    <span className="w-8 text-center">{index + 1}:</span>
+                                    <span className={`flex-grow ${item.completed ? 'line-through' : ''}`}>{item.description}</span>
+                                    <div>
+                                        <button onClick={() => handleCompleteToggle(item.id, item.completed)} className="mr-2">
+                                            {item.completed ? '❌' : '✅'}
+                                        </button>
+                                        <button onClick={() => handleDelete(item.id)}>🗑️</button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>

@@ -51,7 +51,7 @@ app = FastAPI(lifespan=lifespan, debug=DEBUG)
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -80,7 +80,17 @@ class ItemUpdate(BaseModel):
 def create_session(response: Response, bucket_id: str):
     session_id = str(uuid.uuid4())  # Generate a unique session ID
     sessions[session_id] = bucket_id  # Store bucket_id in memory
-    response.set_cookie(key=SESSION_COOKIE_NAME, value=session_id)
+    response.set_cookie(key=SESSION_COOKIE_NAME, value=session_id, httponly=True, secure=False, samesite='Lax')
+
+# check the session
+@app.get("/api/session")
+async def check_session(request: Request):
+    """Check if the user is authenticated"""
+    try:
+        bucket_id = get_current_bucket_id(request)
+        return {"message": "Session is valid", "bucket_id": bucket_id}
+    except HTTPException:
+        raise HTTPException(status_code=401, detail="Not authenticated")
 
 # Login and registration
 @app.post("/api/register", status_code=status.HTTP_201_CREATED)
@@ -106,8 +116,9 @@ async def login_user(user: UserLogin, response: Response):
 
     # Create session and store bucket_id in session
     create_session(response, db_user.bucket_id)
+    print(f"User logged in - ID: {db_user.id}, Username: {db_user.username}")
 
-    return {"message": "Login successful"}
+    return {"message": "Login successful", "user_id": str(db_user.id)}
 
 # Get current bucket_id from session
 def get_current_bucket_id(request: Request) -> str:
@@ -137,7 +148,7 @@ async def add_item_to_bucket(item: NewItem, request: Request):
     print(bucket)
     return NewItemResponse(id=bucket.items[-1].id, description=item.description)
 
-@app.patch("/api/bucket/items/{item_id}/completed", response_model=BucketList)
+@app.post("/api/bucket/items/{item_id}/completed", response_model=BucketList)
 async def update_item_completed(item_id: str, update: ItemUpdate, request: Request):
     """Update the completion status of a bucket list item"""
     bucket_id = get_current_bucket_id(request)

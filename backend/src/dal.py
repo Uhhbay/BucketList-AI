@@ -79,6 +79,16 @@ class UserDAL:
             {"name": "My Bucket List", "items": []}, session=session
         )
         return str(response.inserted_id)
+    
+    async def set_item_completed(self, bucket_id: str, item_id: str, completed: bool, session=None) -> Optional[BucketList]:
+        res = await self._bucket_collection.find_one_and_update(
+            {"_id": ObjectId(bucket_id), "items.id": item_id},
+            {"$set": {"items.$.completed": completed}},
+            session=session,
+            return_document=ReturnDocument.AFTER,
+        )
+
+        return BucketList.from_doc(res) if res else None
 
     async def get_user_by_username(self, username: str, session=None) -> Optional[User]:
         """Retrieve a user by their username."""

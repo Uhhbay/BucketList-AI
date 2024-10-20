@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,11 +13,30 @@ const links = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const handleDashboard = () => {
-    const isLoggedIn = localStorage.getItem('bucketlist-token');
+  useEffect(() => {
+      // Check session validity on component mount
+      const checkSession = async () => {
+          try {
+              const response = await fetch('http://localhost:3001/api/session', {
+                  method: 'GET',
+                  credentials: 'include',  // Ensure cookies are included
+              });
 
+              if (response.ok) {
+                  setIsLoggedIn(true);
+              }
+          } catch (error) {
+              console.error('Session check failed', error);
+          }
+      };
+
+      checkSession();
+  }, []);
+
+  const handleDashboard = () => {
     if (isLoggedIn) {
       navigate('/dashboard');
     } else {
@@ -46,22 +65,20 @@ export default function Navbar() {
           >
             <div className="flex flex-col h-full justify-center items-center gap-4">
               {links.map((link, index) => (
-                <button
+                <Link
                   key={index}
+                  to={link.path}
                   className={`text-4xl ${activeSection === link.name ? "text-sky-600" : "text-gray-800"} hover:text-sky-400`}
                   onClick={() => {
                     if (link.path === "/dashboard") {
                       handleDashboard();
-                    } else {
-                      setActiveSection(link.name);
-                      navigate(link.path);
-
-                    }
+                    } 
+                    setActiveSection(link.name);
                     setIsOpen(false);
                   }}
                 >
                   {link.name}
-                </button>
+                </Link>
               ))}
             </div>
           </motion.div>
@@ -90,18 +107,16 @@ export default function Navbar() {
           <ul className="flex space-x-3">
             {links.map((link) => (
               <motion.li key={link.path} className="relative">
-                <button
+                <Link
+                  to={link.path}
                   className={`px-1 rounded-md ${
                     activeSection === link.name ? "text-sky-600 font-semibold" : "text-gray-800"
                   } hover:text-sky-400`}
                   onClick={(e) => {
                     if (link.path === "/dashboard") {
-                      e.preventDefault();
                       handleDashboard();
-                    } else {
-                      setActiveSection(link.name);
-                      navigate(link.path);
                     }
+                    setActiveSection(link.name);
                   }}
                 >
                   {link.name}
@@ -112,7 +127,7 @@ export default function Navbar() {
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </button>
+                </Link>
               </motion.li>
             ))}
           </ul>
